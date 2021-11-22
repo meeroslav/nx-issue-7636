@@ -1,0 +1,154 @@
+{
+  "version": 1,
+  "cli": {
+    "defaultCollection": "@nrwl/angular"
+  },
+  "defaultProject": "testone",
+  "schematics": {
+    "@nrwl/angular": {
+      "application": {
+        "linter": "eslint"
+      },
+      "library": {
+        "linter": "eslint"
+      },
+      "storybook-configuration": {
+        "linter": "eslint"
+      }
+    },
+    "@nrwl/angular:application": {
+      "style": "css",
+      "linter": "eslint",
+      "unitTestRunner": "jest",
+      "e2eTestRunner": "cypress"
+    },
+    "@nrwl/angular:library": {
+      "style": "css",
+      "linter": "eslint",
+      "unitTestRunner": "jest"
+    },
+    "@nrwl/angular:component": {
+      "style": "css"
+    }
+  },
+  "projects": {
+    "testone": {
+      "projectType": "application",
+      "root": "apps/testone",
+      "sourceRoot": "apps/testone/src",
+      "prefix": "test7636",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/apps/testone",
+            "index": "apps/testone/src/index.html",
+            "main": "apps/testone/src/main.ts",
+            "polyfills": "apps/testone/src/polyfills.ts",
+            "tsConfig": "apps/testone/tsconfig.app.json",
+            "assets": [
+              "apps/testone/src/favicon.ico",
+              "apps/testone/src/assets"
+            ],
+            "styles": ["apps/testone/src/styles.css"],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "apps/testone/src/environments/environment.ts",
+                  "with": "apps/testone/src/environments/environment.prod.ts"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "configurations": {
+            "production": {
+              "browserTarget": "testone:build:production"
+            },
+            "development": {
+              "browserTarget": "testone:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "testone:build"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "apps/testone/src/**/*.ts",
+              "apps/testone/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/testone"],
+          "options": {
+            "jestConfig": "apps/testone/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "testone-e2e": {
+      "root": "apps/testone-e2e",
+      "sourceRoot": "apps/testone-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/testone-e2e/cypress.json",
+            "tsConfig": "apps/testone-e2e/tsconfig.e2e.json",
+            "devServerTarget": "testone:serve:development"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "testone:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/testone-e2e/**/*.{js,ts}"]
+          }
+        }
+      }
+    }
+  }
+}
